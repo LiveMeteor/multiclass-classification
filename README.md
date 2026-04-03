@@ -1,4 +1,4 @@
-# Multiclass Classification Project
+# Multiclass Classification Experiment Project
 
 **Author:** Marvin Li 
 
