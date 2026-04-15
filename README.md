@@ -37,14 +37,38 @@ URL: https://huggingface.co/datasets/dpdl-benchmark/places365-mini-sample-hard
 
 ```
 project/
-├── CNNClassfication.ipynb       # Custom training: SimpleCNN and MiniVGG models
-├── LeNetClassfication.ipynb     # Custom training: LeNet model (dedicated notebook)
+├── CNNClassfication.ipynb       # Custom training: SimpleCNN model
+├── LeNetClassfication.ipynb     # Custom training: LeNet model
 ├── ResNetClassfication.ipynb    # Transfer learning with pretrained ResNet50
 ├── ViTClassfication.ipynb       # Transfer learning with pretrained ViT-B/16
 ├── Downloader.py                # Script to download Places365 images by category
-├── DownloaderRemote.py          # Remote download from HuggingFace
+├── DownloaderRemote.ipynb       # Remote download from HuggingFace
 └── README.md
 ```
+
+---
+
+## Getting Started
+
+**Step 1 — Download the dataset**
+
+Open `DownloaderRemote.ipynb` and run the first cell. It will download the Places365 Mini Hard dataset from HuggingFace and save the images to `./data/`.
+
+**Step 2 — Run a model notebook**
+
+Open any of the four model notebooks and run all cells in order. Each notebook will:
+
+1. Load images from `./data/`, resize them, and cache `train_loader.pt` / `test_loader.pt` for faster subsequent runs.
+2. Define and train the model.
+3. Plot training/validation loss and accuracy curves.
+4. Evaluate on the test set — confusion matrix, per-class F1 score, and weighted F1.
+
+| Model      | Notebook                    |
+|------------|-----------------------------|
+| SimpleCNN  | `CNNClassfication.ipynb`    |
+| LeNet      | `LeNetClassfication.ipynb`  |
+| ResNet50   | `ResNetClassfication.ipynb` |
+| ViT-B/16   | `ViTClassfication.ipynb`    |
 
 ---
 
