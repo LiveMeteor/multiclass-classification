@@ -50,12 +50,6 @@ project/
 
 ## Models
 
-### Custom CNNs (`CNNClassfication.ipynb`)
-
-| Model      | Architecture Summary                                              |
-|------------|-------------------------------------------------------------------|
-| SimpleCNN  | 3× Conv2d + BN + LeakyReLU + MaxPool → Flatten → Linear(10)     |
-
 ### LeNet (`LeNetClassfication.ipynb`)
 
 | Model | Architecture Summary                                                                           |
@@ -65,6 +59,12 @@ project/
 - **Input size:** 256×256
 - **Activation:** ReLU (replaces original Tanh/Sigmoid to avoid vanishing gradients)
 - **Optimizer:** Adam, lr=0.001
+
+### Custom CNNs (`CNNClassfication.ipynb`)
+
+| Model      | Architecture Summary                                              |
+|------------|-------------------------------------------------------------------|
+| SimpleCNN  | 3× Conv2d + BN + LeakyReLU + MaxPool → Flatten → Linear(10)     |
 
 ### Transfer Learning — ResNet50 (`ResNetClassfication.ipynb`)
 
