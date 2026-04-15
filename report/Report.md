@@ -1,14 +1,14 @@
-## Place365 Images Classification Project Report
+## Places365 Scene Classification — Project Report
 
-
+---
 
 ### Dataset
 
-This project implements and compares multiple neuro network architectures for scene classification. The applying is a subset of `Places365` - `Places365 Mini Hard`.
+This project implements and compares four neural network architectures for scene classification using the **Places365 Mini Hard** dataset.
 
-The Places365 dataset is designed following principles of human visual cognition. It is good for training artificaial system of high-level visual understanding tasks. The dataset contains more than 10 million images comprising 400+ unique scene categories. The dataset features 5000 to 30,000 training images per class, consistent with real-world frequencies of occurrence.
+The Places365 dataset was designed following principles of human visual cognition, making it well-suited for training systems on high-level visual understanding tasks. It contains over 10 million images spanning 400+ unique scene categories, with 5,000 to 30,000 training images per class, reflecting real-world scene frequencies.
 
-`Places365 Mini Hard` is a challenging subset of the Places365 scene recognition dataset, containing 10 scene categories.
+**Places365 Mini Hard** is a challenging subset of Places365 containing 10 scene categories:
 
 | Label | Class Name       |
 |-------|-----------------|
@@ -23,102 +23,113 @@ The Places365 dataset is designed following principles of human visual cognition
 | 8     | Performance      |
 | 9     | Conference Hall  |
 
-### Using Instructions
+---
 
-+ Step 1: Open `DownloadetRemote.ipynb`, running the code of first cell, download the dataset from the remote server and save them to local folder `./data/*`
+### Usage Instructions
 
-+ Step 2: Run the following file to execute the detailed code for the four models.
+**Step 1 — Download the dataset**
 
-| Model      | Notebook                   |
-|------------|----------------------------|
-| SimpleCNN  | CNNClassfication.ipynb     |
-| LeNet      | LeNetClassfication.ipynb   |
-| ResNet50   | ResNetClassfication.ipynb  |
-| ViT-B/16   | ViTClassfication.ipynb     |
+Open `DownloaderRemote.ipynb` and run the first cell. This downloads the Places365 Mini Hard dataset from HuggingFace and saves it to `./data/`.
 
-The functions are explained as follows:
+**Step 2 — Run a model notebook**
 
-1. Loading files from the local folder and previewing them, I noticed that the image sizes are different.
+Open any of the four model notebooks and run all cells in order:
 
-2. Resize the images to 256 X 256; for the ViT model, resize them to 224 X 224 (as required by the pre-trained model). Then save them as `train_loader.pt` and `test_loader.pt`.
+| Model      | Notebook                    |
+|------------|-----------------------------|
+| SimpleCNN  | `CNNClassfication.ipynb`    |
+| LeNet      | `LeNetClassfication.ipynb`  |
+| ResNet50   | `ResNetClassfication.ipynb` |
+| ViT-B/16   | `ViTClassfication.ipynb`    |
 
-For time savings, the data will be loaded at the adjusted size the next time you use it.
+Each notebook follows the same pipeline:
 
-3. Define the model structure separately.
+1. Load images from `./data/` and preview them. I noticed that the original images vary in size.
+2. Resize all images to 256×256 (or 224×224 for ViT, as required by the pretrained model), then save the result as `train_loader.pt` and `test_loader.pt` to convenient for us to start the operation from the middle.
+3. Define the model architecture.
+4. Train, validate, and evaluate the model, then save the model weights to a file.
+5. Plot training and validation loss/accuracy curves, a confusion matrix on the test set, and per-class F1 scores.
 
-4. Training, validation, and evaluation of the model. Then save the model parameters to a file.
-
-5. Plot training and validation loss and accuracy. Confusion matrix on test data. F1 score on test data.
-
+---
 
 ### Models
 
 #### LeNet
 
-LeNet is a series of convolutional neural network architectures created by a research group in AT&T Bell Laboratories during the 1988 to 1998 period, centered around Yann LeCun. I used the version is public in 1998, it is the most well-known version. It is also sometimes called LeNet-5.
+LeNet is one of the earliest convolutional neural network architectures, developed at AT&T Bell Laboratories by a team led by Yann LeCun between 1988 and 1998. This project uses the 1998 release, commonly known as LeNet-5.
 
-The structure of LeNet is fixed, it applied big kernel size 5, 2 convolutional layers and 3 full connections layers.
+LeNet has a fixed structure: two convolutional layers with large 5×5 kernels, followed by three fully connected layers.
 
-![alt text](le_net_image.png)
+![LeNet architecture](le_net_image.png)
 
-After 20 epoch iterations, The training loss has tended to stabilize, And it approaches zero, showing a tendency towards overfitting. But the validation loss is not very stable, and there has been no significant improvement. 
+After 20 epochs, the training loss stabilized and approached zero, indicating overfitting. The validation loss remained unstable with no meaningful improvement.
 
-![alt text](le_net_loss.png)
-![alt text](le_net_accuracy.png)
+![LeNet loss curve](le_net_loss.png)
+![LeNet accuracy curve](le_net_accuracy.png)
 
-Finally, the F1 Score is 0.5408.
+The model achieved a weighted F1 score of **0.5408**, which reflects poor generalization given the limited capacity of the architecture for this task.
 
-![alt text](le_net_f1.png)
+![LeNet F1 score](le_net_f1.png)
 
-#### Simple CNN
+---
 
-Simple CNN 是现代典型基础网络结构，倾向于较小的卷积核 (例如 3x3)，结构比较灵活，2-3层卷积层，1-2层全连接层，网络结构如下图。
+#### SimpleCNN
 
-![alt text](cnn_structure.png)
+SimpleCNN follows a modern, compact CNN design — smaller 3×3 kernels, flexible depth with 2–3 convolutional layers, and 1–2 fully connected layers. The full architecture is shown below.
 
-15次迭代之后，由 Accuracy line chart 可以看出来，模型已经几乎学不到什么东西了，因为训练样本体量比较小。
+![SimpleCNN architecture](cnn_structure.png)
 
-![alt text](cnn_loss.png)
-![alt text](cnn_accuracy.png)
+After 15 epochs, the accuracy curve flattened, suggesting the model had extracted most of the learnable signal from the relatively small training set.
 
-Finally, the F1 Score is 0.7293. Comparing the F1 Score of LeNet, the model is available, but it is not good.
+![SimpleCNN loss curve](cnn_loss.png)
+![SimpleCNN accuracy curve](cnn_accuracy.png)
 
-![alt text](cnn_f1.png)
+The model achieved a weighted F1 score of **0.7293** — a clear improvement over LeNet, though still limited by the size of the dataset.
 
-于是，我们尝试使用迁移学习的方式。
+![SimpleCNN F1 score](cnn_f1.png)
 
-#### Transfer Learning - ResNet50
+Given these limitations, transfer learning was explored as the next step.
 
-ResNet50（Residual Network 50）是微软研究院于2015年提出的一种深度卷积神经网络结构，是ResNet（残差网络）系列的一员。它引入了 Residual Block 的概念，残差块的核心是跨层直连）shortcut connection, 当前卷积层的变换后，与变化前的特征一起传入下一层，避免了因为神经网络太深引起的梯度消失问题。
+---
 
-我选择了只训练它的后10层，包括 Stage 4 的一部分参数和最后的池化，全连接层。结构如下。
+#### Transfer Learning — ResNet50
 
-![alt text](res_net_structure.png)
+ResNet50 (Residual Network, 50 layers) was proposed by Microsoft Research in 2015. It is a member of the ResNet family, which introduced the concept of **residual blocks** — shortcut connections that add the input of a block directly to its output. This design allows gradients to flow more freely during backpropagation, effectively solving the vanishing gradient problem that plagued very deep networks.
 
-它的训练效率很高，10次迭代之后就达到了如下的 F1 Score, 0.8534
+For fine-tuning, all layers were frozen except the last 10, which include part of Stage 4, the global average pooling layer, and the fully connected classification head. The fine-tuned portion of the network is illustrated below.
 
-![alt text](res_net_f1.png)
+![ResNet50 fine-tuned structure](res_net_structure.png)
 
-#### Transfer Learning - Vit-B/16
+The model converged quickly: after just 10 epochs, it achieved a weighted F1 score of **0.8617**.
 
-最后，尝试使用的最新的 ViT 预模型模型，ViT Basic version Patch Size 16. 它的结构比 ResNet 简单，是12层 Encoder Block 结构，我只训练了它的 11 层和 12层，以及最后的全连接分类层。结构如下。 
+![ResNet50 F1 score](res_net_f1.png)
 
-![alt text](vit_structure.png)
+---
 
-10次迭代之后，F1 Score 达到了 0.934
+#### Transfer Learning — ViT-B/16
 
-![alt text](vit_f1.png)
+Finally, a Vision Transformer (ViT-B/16) was evaluated. ViT-B/16 is the base variant of the Vision Transformer with a patch size of 16×16. Unlike ResNet, it uses no convolutions — the image is split into fixed patches, which are linearly embedded and passed through 12 Transformer encoder blocks. While structurally simpler than ResNet50 in terms of inductive bias, it benefits enormously from large-scale pretraining.
+
+For fine-tuning, only the last two encoder blocks (layers 11 and 12) and the classification head were unfrozen. The fine-tuned components are shown below.
+
+![ViT-B/16 fine-tuned structure](vit_structure.png)
+
+After 10 epochs, the model achieved a weighted F1 score of **0.9034**, the highest among all four models.
+
+![ViT-B/16 F1 score](vit_f1.png)
+
+---
 
 ### Conclusion
 
-以下是评估结果的统计，按从低到高排列
+The table below summarizes the evaluation results for all models, sorted by weighted F1 score:
 
-| Model      | Notebook                   | Batch Size | Epochs | Val Loss | Val Accuracy | Weighted F1 |
-|------------|----------------------------|-----------|--------|----------|--------------|-------------|
-| LeNet      | LeNetClassfication.ipynb   | 32        | 20     | 5.0790   | 44.92%       | 0.5194      |
-| SimpleCNN  | CNNClassfication.ipynb     | 16        | 20     | 1.9833   | 58.63%       | 0.6482      |
-| SimpleCNN  | CNNClassfication.ipynb     | 32        | 20     | 1.5336   | 63.82%       | 0.6648      |
-| ResNet50   | ResNetClassfication.ipynb  | 32        | 10     | 0.3853   | 85.16%       | 0.8617      |
-| ViT-B/16   | ViTClassfication.ipynb     | 32        | 10     | 0.5985   | 86.99%       | 0.9034      |
+| Model      | Notebook                    | Batch Size | Epochs | Val Loss | Val Accuracy | Weighted F1 |
+|------------|-----------------------------|-----------|--------|----------|--------------|-------------|
+| LeNet      | `LeNetClassfication.ipynb`  | 32        | 20     | 5.0790   | 44.92%       | 0.5194      |
+| SimpleCNN  | `CNNClassfication.ipynb`    | 16        | 20     | 1.9833   | 58.63%       | 0.6482      |
+| SimpleCNN  | `CNNClassfication.ipynb`    | 32        | 20     | 1.5336   | 63.82%       | 0.6648      |
+| ResNet50   | `ResNetClassfication.ipynb` | 32        | 10     | 0.3853   | 85.16%       | 0.8617      |
+| ViT-B/16   | `ViTClassfication.ipynb`    | 32        | 10     | 0.5985   | 86.99%       | 0.9034      |
 
-在解决图形识别问题上，迁移学习是个宝藏。海量的预训练模型记录着海量的特征信息。所以利用预训练模型，然后解决实际的业务上的问题就可以了。
+Transfer learning is a highly effective strategy for image classification tasks, especially when the available training data is limited. Pretrained models encode rich feature representations learned from millions of images, and fine-tuning them on a target task requires far fewer epochs while achieving substantially better accuracy than training from scratch.
