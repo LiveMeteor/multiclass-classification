@@ -1,4 +1,4 @@
-# Multiclass Classification Experiment Project
+# Scene Recognition and Images Classification
 
 ---
 
