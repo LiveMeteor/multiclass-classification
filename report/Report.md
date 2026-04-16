@@ -1,4 +1,4 @@
-## Places365 Scene Classification — Project Report
+## Scene Recognition and Images Classification — Project Report
 
 ---
 
