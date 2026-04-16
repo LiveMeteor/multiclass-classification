@@ -1,7 +1,5 @@
 # Multiclass Classification Experiment Project
 
-**Author:** Marvin Li 
-
 ---
 
 ## Overview
@@ -110,10 +108,9 @@ Open any of the four model notebooks and run all cells in order. Each notebook w
 
 | Model      | Notebook                   | Batch Size | Epochs | Val Loss | Val Accuracy | Weighted F1 |
 |------------|----------------------------|-----------|--------|----------|--------------|-------------|
-| SimpleCNN  | CNNClassfication.ipynb     | 32        | 20     | 1.5336   | 63.82%       | 0.6648      |
-| SimpleCNN  | CNNClassfication.ipynb     | 16        | 20     | 1.9833   | 58.63%       | 0.6482      |
-| LeNet      | LeNetClassfication.ipynb   | 32        | 20     | 5.0790   | 44.92%       | 0.5194      |
-| ResNet50   | ResNetClassfication.ipynb  | 32        | 10     | 0.3853   | 85.16%       | 0.8617      |
-| ViT-B/16   | ViTClassfication.ipynb     | 32        | 10     | 0.5985   | 86.99%       | 0.9034      |
+| LeNet      | LeNetClassfication.ipynb   | 32        | 20     | 7.3042   | 44.51%       | 54.08%      |
+| SimpleCNN  | CNNClassfication.ipynb     | 32        | 20     | 1.4202   | 65.85%       | 72.93%      |
+| ResNet50   | ResNetClassfication.ipynb  | 32        | 10     | 0.3941   | 85.57%       | 95.34%      |
+| ViT-B/16   | ViTClassfication.ipynb     | 32        | 10     | 0.5985   | 86.99%       | 90.34%      |
 
 ---
